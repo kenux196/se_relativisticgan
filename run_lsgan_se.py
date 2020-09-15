@@ -6,7 +6,7 @@ Deepak Baby, UGent, June 2018.
 from __future__ import print_function
 
 import tensorflow as tf
-from tensorflow.contrib.layers import xavier_initializer, flatten, fully_connected
+#from tensorflow.contrib.layers import xavier_initializer, flatten, fully_connected
 import numpy as np
 import keras
 from keras.layers import Input, Dense, Conv1D, Conv2D, Conv2DTranspose, BatchNormalization
@@ -14,6 +14,7 @@ from keras.layers import LeakyReLU, PReLU, Reshape, Concatenate, Flatten
 from keras.models import Sequential, Model
 from keras.optimizers import Adam
 from keras.callbacks import TensorBoard
+from keras.utils import plot_model
 keras_backend = tf.keras.backend
 keras_initializers = tf.keras.initializers
 from data_ops import *
@@ -111,7 +112,9 @@ if __name__ == '__main__':
     d_out = D([wav_in_clean, wav_in_noisy])
     D = Model([wav_in_clean, wav_in_noisy], d_out)
     G.summary()
+    plot_model(G, to_file="G1.png", show_shapes=True)
     D.summary()
+    plot_model(D, to_file="D1.png", show_shapes=True)
 
     # compile individual models
     D.compile(loss='mean_squared_error', optimizer=d_opt)
@@ -142,10 +145,13 @@ if __name__ == '__main__':
 
     # Begin the training part
     if TRAIN_SEGAN:   
-        fclean = h5py.File(clean_train_matfile)
-        clean_train_data = np.array(fclean['feat_data']).astype('float32')
         fnoisy = h5py.File(noisy_train_matfile)
-        noisy_train_data = np.array(fnoisy['feat_data']).astype('float32')
+        #noisy_train_data = np.array(fnoisy['feat_data']).astype('float32')
+        noisy_train_data = fnoisy['feat_data'].astype('float32')
+        fclean = h5py.File(clean_train_matfile)
+        print(fclean)
+        #clean_train_data = np.array(fclean['feat_data']).astype('float32')
+        clean_train_data = fclean['feat_data'].astype('float32')        
         numtrainsamples = clean_train_data.shape[1]
         idx_all = np.arange(numtrainsamples)
         # set random seed

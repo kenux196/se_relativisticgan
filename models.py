@@ -5,7 +5,7 @@ Deepak Baby, UGent, June 2018.
 from __future__ import print_function
 
 import tensorflow as tf
-from tensorflow.contrib.layers import xavier_initializer, flatten, fully_connected
+#from tensorflow.contrib.layers import xavier_initializer, flatten, fully_connected
 import numpy as np
 import keras
 from keras.layers import Input, Dense, Conv1D, Conv2DTranspose, BatchNormalization
@@ -13,6 +13,7 @@ from keras.layers import LeakyReLU, PReLU, Reshape, Concatenate, Flatten, Activa
 from keras.models import Sequential, Model
 from keras.optimizers import Adam
 from keras.callbacks import TensorBoard
+from keras.utils import plot_model
 from normalizations import InstanceNormalization
 #from bnorm import VBN
 #Conv2DTranspose = tf.keras.layers.Conv2DTranspose
@@ -104,7 +105,7 @@ def generator(opts):
      
     if opts ['show_summary'] :
         G.summary()
-
+    plot_model(G, to_file="G.png", show_shapes=True)
     return G
 
 
@@ -150,5 +151,6 @@ def discriminator(opts):
   
     if opts ['show_summary']:
         D.summary()
+    plot_model(D, to_file="D.png", show_shapes=True)
     return D
 
