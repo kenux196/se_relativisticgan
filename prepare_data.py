@@ -55,6 +55,9 @@ def prepare_sliced_data1d(opts):
     for ind, wav_file in enumerate(wav_files):
         if ind % 10 == 0 :
             print("Processing " + str(ind) + " of " + str(len(wav_files)) + " files.")
+        if ind == 10000:
+            break
+        
         wavfilename = os.path.join(wavfolder, wav_file)
         sliced = read_and_slice1d(wavfilename, window_size, minlength, stride=stride)
         full_sliced.append(sliced)
@@ -75,7 +78,7 @@ if __name__ == '__main__':
     opts['minlength']= 0.5 * (2 ** 14)
     testfilenames = os.path.join(opts['datafolder'], "test_wav.txt")
     trainfilenames = os.path.join(opts['datafolder'], "train_wav.txt")
-  
+    '''
     # for test set 
     opts['filenames'] = testfilenames
     # for clean set
@@ -101,12 +104,19 @@ if __name__ == '__main__':
     destinationfilenamenoisy = "./data/noisy_test_segan1d.mat"
     hdf5storage.savemat(destinationfilenamenoisy, matcontent)
   
-
+    '''
     # for train set 
     opts['filenames'] = trainfilenames
     # for clean set
     opts['wavfolder'] = os.path.join(opts['datafolder'], "clean_trainset_56spk_wav_16kHz")
     clean_train_sliced, dfi = prepare_sliced_data1d(opts)
+    matcontent={}
+    matcontent[u'feat_data'] = clean_train_sliced
+    matcontent[u'dfi'] = dfi
+    destinationfilenameclean = "./data/clean_train_segan1d.mat"
+    hdf5storage.savemat(destinationfilenameclean, matcontent)
+    
+    '''
     # for noisy set
     opts['wavfolder'] = os.path.join(opts['datafolder'], "noisy_trainset_56spk_wav_16kHz")
     noisy_train_sliced, dfi = prepare_sliced_data1d(opts)
@@ -116,15 +126,10 @@ if __name__ == '__main__':
         raise ValueError('Sliced matrices have a different size than mentioned in dfi !')
     
     matcontent={}
-    matcontent[u'feat_data'] = clean_train_sliced
-    matcontent[u'dfi'] = dfi
-    destinationfilenameclean = "./data/clean_train_segan1d.mat"
-    hdf5storage.savemat(destinationfilenameclean, matcontent)
-
-    matcontent={}
     matcontent[u'feat_data'] = noisy_train_sliced
     matcontent[u'dfi'] = dfi
     destinationfilenamenoisy = "./data/noisy_train_segan1d.mat"
     hdf5storage.savemat(destinationfilenamenoisy, matcontent)
+    '''
  
     

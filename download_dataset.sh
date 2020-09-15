@@ -17,14 +17,14 @@ pushd $datadir
 for dset in $datasets; do
     if [ ! -d ${dset}_16kHz ]; then
         # Clean utterances
-        if [ ! -f ${dset}.zip ]; then
-            echo 'DOWNLOADING $dset'
-            wget http://datashare.is.ed.ac.uk/bitstream/handle/10283/2791/${dset}.zip
-        fi
-        if [ ! -d ${dset} ]; then
-            echo 'INFLATING ${dset}...'
-            unzip -q ${det}.zip -d $dset
-        fi
+        #if [ ! -f ${dset}.zip ]; then
+        #    echo 'DOWNLOADING $dset'
+        #    wget http://datashare.is.ed.ac.uk/bitstream/handle/10283/2791/${dset}.zip
+        #fi
+        #if [ ! -d ${dset} ]; then
+        #    echo 'INFLATING ${dset}...'
+        #    unzip -q ${dset}.zip -d $dset
+        #fi
         if [ ! -d ${dset}_16kHz ]; then
             echo 'CONVERTING WAVS TO 16K...'
             mkdir -p ${dset}_16kHz
