@@ -29,6 +29,14 @@ import scipy.io.wavfile as wavfile
 
 if __name__ == '__main__':
 
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    if gpus:
+        try:
+            tf.config.experimental.set_memory_growth(gpus[0], True)
+        except RuntimeError as e:
+            # 프로그램 시작시에 메모리 증가가 설정되어야만 합니다
+            print(e)  
+
     # Various GAN options
     opts = {}
     opts ['dirhead'] = "LSGAN"
@@ -146,12 +154,12 @@ if __name__ == '__main__':
     # Begin the training part
     if TRAIN_SEGAN:   
         fnoisy = h5py.File(noisy_train_matfile)
-        #noisy_train_data = np.array(fnoisy['feat_data']).astype('float32')
-        noisy_train_data = fnoisy['feat_data'].astype('float32')
+        noisy_train_data = np.array(fnoisy['feat_data']).astype('float32')
+        #noisy_train_data = fnoisy['feat_data']
         fclean = h5py.File(clean_train_matfile)
         print(fclean)
-        #clean_train_data = np.array(fclean['feat_data']).astype('float32')
-        clean_train_data = fclean['feat_data'].astype('float32')        
+        clean_train_data = np.array(fclean['feat_data']).astype('float32')
+        #clean_train_data = fclean['feat_data']      
         numtrainsamples = clean_train_data.shape[1]
         idx_all = np.arange(numtrainsamples)
         # set random seed

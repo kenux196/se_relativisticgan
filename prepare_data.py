@@ -57,7 +57,7 @@ def prepare_sliced_data1d(opts):
             print("Processing " + str(ind) + " of " + str(len(wav_files)) + " files.")
         if ind == 10000:
             break
-        
+
         wavfilename = os.path.join(wavfolder, wav_file)
         sliced = read_and_slice1d(wavfilename, window_size, minlength, stride=stride)
         full_sliced.append(sliced)
@@ -109,27 +109,27 @@ if __name__ == '__main__':
     opts['filenames'] = trainfilenames
     # for clean set
     opts['wavfolder'] = os.path.join(opts['datafolder'], "clean_trainset_56spk_wav_16kHz")
-    clean_train_sliced, dfi = prepare_sliced_data1d(opts)
+    clean_train_sliced, dfi = prepare_sliced_data1d(opts)    
+    # for noisy set
+    opts['wavfolder'] = os.path.join(opts['datafolder'], "noisy_trainset_56spk_wav_16kHz")
+    noisy_train_sliced, dfi = prepare_sliced_data1d(opts)
+
+    if clean_train_sliced.shape[0] != noisy_train_sliced.shape[0] :
+        raise ValueError('Clean sliced and noisy sliced are not of the same size!')
+    if clean_train_sliced.shape[0] != dfi[-1,1] :
+        raise ValueError('Sliced matrices have a different size than mentioned in dfi !')
+
     matcontent={}
     matcontent[u'feat_data'] = clean_train_sliced
     matcontent[u'dfi'] = dfi
     destinationfilenameclean = "./data/clean_train_segan1d.mat"
     hdf5storage.savemat(destinationfilenameclean, matcontent)
     
-    '''
-    # for noisy set
-    opts['wavfolder'] = os.path.join(opts['datafolder'], "noisy_trainset_56spk_wav_16kHz")
-    noisy_train_sliced, dfi = prepare_sliced_data1d(opts)
-    if clean_train_sliced.shape[0] != noisy_train_sliced.shape[0] :
-        raise ValueError('Clean sliced and noisy sliced are not of the same size!')
-    if clean_train_sliced.shape[0] != dfi[-1,1] :
-        raise ValueError('Sliced matrices have a different size than mentioned in dfi !')
-    
     matcontent={}
     matcontent[u'feat_data'] = noisy_train_sliced
     matcontent[u'dfi'] = dfi
     destinationfilenamenoisy = "./data/noisy_train_segan1d.mat"
     hdf5storage.savemat(destinationfilenamenoisy, matcontent)
-    '''
+    
  
     
