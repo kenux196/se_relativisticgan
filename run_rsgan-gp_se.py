@@ -5,7 +5,7 @@ Deepak Baby, UGent, June 2018.
 from __future__ import print_function
 
 import tensorflow as tf
-from tensorflow.contrib.layers import xavier_initializer, flatten, fully_connected
+#from tensorflow.contrib.layers import xavier_initializer, flatten, fully_connected
 import numpy as np
 from keras.layers import Subtract, Activation, Input
 from keras.models import Model
@@ -34,6 +34,14 @@ class RandomWeightedAverage (_Merge):
         return (weights * inputs[0]) + ((1 - weights) * inputs[1])
 
 if __name__ == '__main__':
+
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    if gpus:
+        try:
+            tf.config.experimental.set_memory_growth(gpus[0], True)
+        except RuntimeError as e:
+            # 프로그램 시작시에 메모리 증가가 설정되어야만 합니다
+            print(e)  
 
     # Various GAN options
     opts = {}
@@ -69,6 +77,7 @@ if __name__ == '__main__':
     opts['leakyrelualpha'] = 0.3
     opts ['batch_size'] = BATCH_SIZE
     opts ['applyprelu'] = True
+    opts ['preemph'] = 0.95
 
    
     opts ['d_activation'] = 'leakyrelu'
@@ -202,9 +211,11 @@ if __name__ == '__main__':
     # Begin the training part
     if TRAIN_SEGAN:
         fclean = h5py.File(clean_train_matfile)
-        clean_train_data = np.array(fclean['feat_data'])
+        #clean_train_data = np.array(fclean['feat_data'])
+        clean_train_data = fclean['feat_data']              
         fnoisy = h5py.File(noisy_train_matfile)
-        noisy_train_data = np.array(fnoisy['feat_data'])
+        #noisy_train_data = np.array(fnoisy['feat_data'])
+        noisy_train_data = fnoisy['feat_data']
         print ("********************************************")
         print ("               SEGAN TRAINING               ")
         print ("********************************************")

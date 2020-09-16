@@ -78,7 +78,7 @@ if __name__ == '__main__':
     opts['minlength']= 0.5 * (2 ** 14)
     testfilenames = os.path.join(opts['datafolder'], "test_wav.txt")
     trainfilenames = os.path.join(opts['datafolder'], "train_wav.txt")
-    '''
+    
     # for test set 
     opts['filenames'] = testfilenames
     # for clean set
@@ -104,7 +104,6 @@ if __name__ == '__main__':
     destinationfilenamenoisy = "./data/noisy_test_segan1d.mat"
     hdf5storage.savemat(destinationfilenamenoisy, matcontent)
   
-    '''
     # for train set 
     opts['filenames'] = trainfilenames
     # for clean set
@@ -130,6 +129,3 @@ if __name__ == '__main__':
     matcontent[u'dfi'] = dfi
     destinationfilenamenoisy = "./data/noisy_train_segan1d.mat"
     hdf5storage.savemat(destinationfilenamenoisy, matcontent)
-    
- 
-    
